@@ -19,5 +19,5 @@ Currently I am learning about javafx and my next major milestone is to upgrade t
 ### How to run:
 
 1. Clone this repository.
-2. Ensure you have the 'Gintama_ED_25.wav' and 'TheClimnb.wav' files inside the 'src/main/resources/' directory.
+2. Ensure you have the 'Gintama_ED_25.wav' and 'TheClimb.wav' files inside the 'src/main/resources/' directory.
 3. Compile and run 'MusicPlayerV2.java'.
