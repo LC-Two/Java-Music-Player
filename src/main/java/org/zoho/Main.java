@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -12,13 +13,16 @@ import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.File;
 
 public class Main extends Application {
     Label timeLabel = new Label("00:00");
     Label durationLabel = new Label("00:00");
     Label divider = new Label("/");
-    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel);
+    Slider progessbar = new Slider();
+
+    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel,progessbar);
 
     public void start(Stage stage){
         Text title = new Text("Javafx Mp3 player");
@@ -57,9 +61,12 @@ public class Main extends Application {
         buttonLayout.setAlignment(Pos.CENTER);
         buttonLayout.getChildren().addAll(prevBtn,playBtn,nextBtn,pauseBtn,loadBtn);
 
+
+        progessbar.setPrefWidth(200);
+
         HBox timeLayout = new HBox(10);
         timeLayout.setAlignment(Pos.BOTTOM_CENTER);
-        timeLayout.getChildren().addAll(timeLabel,divider,durationLabel);
+        timeLayout.getChildren().addAll(timeLabel,divider,durationLabel,progessbar);
 
 
         VBox root = new VBox(20);

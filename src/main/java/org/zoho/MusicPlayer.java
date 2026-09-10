@@ -1,6 +1,7 @@
 package org.zoho;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -13,6 +14,7 @@ public class MusicPlayer {
     private int currentSongIndex =0;
     private Label timeLabel;
     private Label durationLabel;
+    private Slider progressBar;
 
     private String formatTime(Duration duration){
         int totalSeconds = (int)Math.floor(duration.toSeconds());
@@ -22,9 +24,10 @@ public class MusicPlayer {
         return String.format("%02d:%02d",minutes,seconds);
     }
 
-    public MusicPlayer(Label timeLabel, Label durationLabel){
+    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar){
         this.timeLabel=timeLabel;
         this.durationLabel=durationLabel;
+        this.progressBar= progressBar;
 
         songs = new String[]{
             "src/main/resources/Gintama_ED_25.mp3",
@@ -57,13 +60,22 @@ public class MusicPlayer {
         mediaPlayer.setOnReady(()->{
             Duration totalDuration = media.getDuration();
             durationLabel.setText(formatTime(totalDuration));
+            progressBar.setMax(totalDuration.toSeconds());
         });
 
         mediaPlayer.currentTimeProperty().addListener((observable, oldTime,newTime)->{
             timeLabel.setText(formatTime(newTime));
+            if(!progressBar.isPressed()){
+                progressBar.setValue(newTime.toSeconds());
+            }
         });
 
-        
+       progressBar.valueProperty().addListener((observable,oldTime,newTime)->{
+           if(progressBar.isPressed()){
+               mediaPlayer.seek(Duration.seconds(newTime.doubleValue()));
+           }
+       });
+
     }
 
     public void loadExternalFIle(File file){
@@ -81,10 +93,21 @@ public class MusicPlayer {
         mediaPlayer.setOnReady(()->{
             Duration totalDuration = media.getDuration();
             durationLabel.setText(formatTime(totalDuration));
+            progressBar.setMax(totalDuration.toSeconds());
         });
 
         mediaPlayer.currentTimeProperty().addListener((observable, oldTime,newTime)->{
             timeLabel.setText(formatTime(newTime));
+
+            if(!progressBar.isPressed()){
+                progressBar.setValue(newTime.toSeconds());
+            }
+        });
+
+        progressBar.valueProperty().addListener((observable,oldTime,newTime)->{
+            if(progressBar.isPressed()){
+                mediaPlayer.seek(Duration.seconds(newTime.doubleValue()));
+            }
         });
 
         play();
