@@ -17,6 +17,7 @@ public class MusicPlayer {
             "src/main/resources/Raga of Revenge.mp3",
             "src/main/resources/The Climb.mp3"
         };
+        loadMusic(currentSongIndex);
     }
 
     private void loadMusic(int index){
@@ -38,6 +39,22 @@ public class MusicPlayer {
 
         mediaPlayer.setOnEndOfMedia(this::next);
     }
+
+    public void loadExternalFIle(File file){
+        if(mediaPlayer!=null){
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+        }
+
+        String uriString = file.toURI().toString();
+        Media media = new Media(uriString);
+        mediaPlayer = new MediaPlayer(media);
+
+        mediaPlayer.setOnEndOfMedia(this::next);
+
+        play();
+    }
+
 
     public void play(){
         if(mediaPlayer != null) mediaPlayer.play();

@@ -8,9 +8,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.File;
 
 public class Main extends Application {
     private MusicPlayer musicPlayer = new MusicPlayer();
@@ -29,9 +31,28 @@ public class Main extends Application {
         pauseBtn.setOnAction(event-> musicPlayer.pause());
         playBtn.setOnAction(event-> musicPlayer.play());
 
+        Button loadBtn = new Button("Load Song");
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose An Audio File");
+
+        fileChooser.getExtensionFilters().addAll(
+              new FileChooser.ExtensionFilter("Audio FIles","*.mp3","*.wav")
+        );
+
+        loadBtn.setOnAction(event->{
+            File selectedFile = fileChooser.showOpenDialog(stage);
+
+            if(selectedFile!=null){
+                musicPlayer.loadExternalFIle(selectedFile);
+                title.setText(selectedFile.getName());
+            }
+        });
+
+
         HBox buttonLayout = new HBox(10);
         buttonLayout.setAlignment(Pos.CENTER);
-        buttonLayout.getChildren().addAll(prevBtn,playBtn,nextBtn,pauseBtn);
+        buttonLayout.getChildren().addAll(prevBtn,playBtn,nextBtn,pauseBtn,loadBtn);
 
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
@@ -44,6 +65,7 @@ public class Main extends Application {
         stage.setOnCloseRequest(event-> musicPlayer.quit());
 
         stage.show();
+
     }
 
 
