@@ -1,63 +1,74 @@
 package org.zoho;
 
-import javax.sound.sampled.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
 
 public class MusicPlayer {
+    private String[] songs;
+    private MediaPlayer mediaPlayer;
+    private int currentSongIndex =0;
 
-    private String filePath1 = "src/main/resources/Gintama_ED_25.wav";
-    private String filePath2 = "src/main/resources/TheClimb.wav";
-
-    File file1 = new File(filePath1);
-    File file2 = new File(filePath2);
-
-
-
-    public void playSong(){
-
-        try(AudioInputStream audioInput= AudioSystem.getAudioInputStream(file1);
-            Scanner scanner = new Scanner(System.in)){
-
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInput);
-
-            String response="";
-
-            while(!response.equals("Q")){
-                System.out.println("P -> Play");
-                System.out.println("S -> Stop");
-                System.out.println("R -> Reset");
-                System.out.println("Q -> Quit");
-                response=scanner.nextLine();
-
-                switch(response){
-                    case "P" -> clip.start();
-                    case "S" -> clip.stop();
-                    case "R" -> clip.setMicrosecondPosition(0);
-                    case "Q" -> clip.close();
-                    default -> System.out.println("Invalid Choice!");
-                }
-            }
-
-
-        }
-        catch (FileNotFoundException e){
-            System.out.println("Cannot Locate resource");
-        }
-        catch(UnsupportedAudioFileException e){
-            System.out.println("Unsupported File");
-        }
-        catch(LineUnavailableException e){
-            System.out.println("Unable to access audio resource");
-        }
-        catch(IOException e){
-            System.out.println("Something went wrong");
-        }
-
+    public MusicPlayer(){
+        songs = new String[]{
+            "src/main/resources/Gintama_ED_25.mp3",
+            "src/main/resources/Gintama_ED_30.mp3",
+            "src/main/resources/Raga of Revenge.mp3",
+            "src/main/resources/The Climb.mp3"
+        };
     }
 
+    private void loadMusic(int index){
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+        }
+
+        File file = new File(songs[index]);
+
+        if(!file.exists()){
+            System.out.println("Cannot find File "+file.getPath());
+            return;
+        }
+
+        String uriString = file.toURI().toString();
+        Media media = new Media(uriString);
+        mediaPlayer = new MediaPlayer(media);
+
+        mediaPlayer.setOnEndOfMedia(this::next);
+    }
+
+    public void play(){
+        if(mediaPlayer != null) mediaPlayer.play();
+    }
+
+    public void pause(){
+        if(mediaPlayer !=null ) mediaPlayer.pause();
+    }
+
+    public void stop(){
+        if(mediaPlayer != null) mediaPlayer.stop();
+    }
+
+    public void quit(){
+        if(mediaPlayer != null) mediaPlayer.dispose();
+    }
+
+    public void next(){
+        currentSongIndex++;
+        if(currentSongIndex >=songs.length) currentSongIndex =0;
+
+        loadMusic(currentSongIndex);
+        play();
+    }
+
+    public void prev(){
+        currentSongIndex--;
+        if(currentSongIndex <0) currentSongIndex =songs.length-1;
+
+        loadMusic(currentSongIndex);
+        play();
+    }
 
 }
