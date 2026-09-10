@@ -1,16 +1,31 @@
 package org.zoho;
 
+import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
+import javafx.util.Duration;
 
 public class MusicPlayer {
     private String[] songs;
     private MediaPlayer mediaPlayer;
     private int currentSongIndex =0;
+    private Label timeLabel;
+    private Label durationLabel;
 
-    public MusicPlayer(){
+    private String formatTime(Duration duration){
+        int totalSeconds = (int)Math.floor(duration.toSeconds());
+        int minutes = totalSeconds/60;
+        int seconds = totalSeconds%60;
+
+        return String.format("%02d:%02d",minutes,seconds);
+    }
+
+    public MusicPlayer(Label timeLabel, Label durationLabel){
+        this.timeLabel=timeLabel;
+        this.durationLabel=durationLabel;
+
         songs = new String[]{
             "src/main/resources/Gintama_ED_25.mp3",
             "src/main/resources/Gintama_ED_30.mp3",
@@ -38,6 +53,17 @@ public class MusicPlayer {
         mediaPlayer = new MediaPlayer(media);
 
         mediaPlayer.setOnEndOfMedia(this::next);
+
+        mediaPlayer.setOnReady(()->{
+            Duration totalDuration = media.getDuration();
+            durationLabel.setText(formatTime(totalDuration));
+        });
+
+        mediaPlayer.currentTimeProperty().addListener((observable, oldTime,newTime)->{
+            timeLabel.setText(formatTime(newTime));
+        });
+
+        
     }
 
     public void loadExternalFIle(File file){
@@ -51,6 +77,15 @@ public class MusicPlayer {
         mediaPlayer = new MediaPlayer(media);
 
         mediaPlayer.setOnEndOfMedia(this::next);
+
+        mediaPlayer.setOnReady(()->{
+            Duration totalDuration = media.getDuration();
+            durationLabel.setText(formatTime(totalDuration));
+        });
+
+        mediaPlayer.currentTimeProperty().addListener((observable, oldTime,newTime)->{
+            timeLabel.setText(formatTime(newTime));
+        });
 
         play();
     }

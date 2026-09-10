@@ -3,6 +3,7 @@ package org.zoho;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -11,11 +12,13 @@ import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
 
 public class Main extends Application {
-    private MusicPlayer musicPlayer = new MusicPlayer();
+    Label timeLabel = new Label("00:00");
+    Label durationLabel = new Label("00:00");
+    Label divider = new Label("/");
+    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel);
 
     public void start(Stage stage){
         Text title = new Text("Javafx Mp3 player");
@@ -54,9 +57,14 @@ public class Main extends Application {
         buttonLayout.setAlignment(Pos.CENTER);
         buttonLayout.getChildren().addAll(prevBtn,playBtn,nextBtn,pauseBtn,loadBtn);
 
+        HBox timeLayout = new HBox(10);
+        timeLayout.setAlignment(Pos.BOTTOM_CENTER);
+        timeLayout.getChildren().addAll(timeLabel,divider,durationLabel);
+
+
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title,buttonLayout);
+        root.getChildren().addAll(title,buttonLayout,timeLayout);
 
         Scene scene = new Scene(root, 350, 150);
         stage.setTitle("MP3 Player");
