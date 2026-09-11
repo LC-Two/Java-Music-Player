@@ -97,6 +97,8 @@ public class Main extends Application {
         root.getChildren().addAll(title,albumCover,titleLabel,buttonLayout,timeLayout,volumeLayout);
 
         Scene scene = new Scene(root, 600, 500);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
         stage.setTitle("MP3 Player");
         stage.setScene(scene);
 

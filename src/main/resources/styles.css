@@ -1,0 +1,36 @@
+.root{
+    -fx-background-color: #191414;
+}
+
+.label{
+    -fx-text-fill: #FFFFFF;
+}
+
+.button{
+    -fx-background-color: #1DB954;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 15px 8px 15px;
+    -fx-cursor: hand;
+}
+
+.button:hover{
+    -fx-background-color: #1ed760;
+}
+
+.slider .track{
+    -fx-background-color: #535353;
+    -fx-background-radius: 5px;
+    -fx-pref-height: 6px;
+}
+
+.slider .thumb{
+    -fx-background-color: #FFFFFF;
+    -fx-pref-width: 12px;
+    -fx-pref-height: 12px;
+}
+
+.slider:hover .thumb{
+    -fx-background-color: #1DB954;
+}
