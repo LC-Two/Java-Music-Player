@@ -10,6 +10,10 @@ Currently, the application runs in the console and utilizes the 'java.sound.samp
 
 Currently I am learning about javafx and my next major milestone is to upgrade this project from Command Line Interface(CLI) to fully interactive Graphical User Interface(GUI).
 
+### Update:
+I saw that using the built in metadata extractor doesn't work for some files due to the version it uses and gemini suggested using mp3agic external libary.
+I will conider using it after a while.
+
 ### Features:
  
 - play and pause audio tracks.

@@ -5,9 +5,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
@@ -21,14 +23,18 @@ public class Main extends Application {
     Label durationLabel = new Label("00:00");
     Label divider = new Label("/");
     Label volumeLabel = new Label("Volume:");
+    Label titleLabel = new Label("No Song Selected");
     Slider progessbar = new Slider();
     Slider volumeBar = new Slider();
+    ImageView albumCover = new ImageView();
 
-    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel,progessbar,volumeBar);
+    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel,progessbar,volumeBar,albumCover,titleLabel);
 
     public void start(Stage stage){
         Text title = new Text("Javafx Mp3 player");
         title.setFont(Font.font("Arial",20));
+
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD,18));
 
         Button prevBtn = new Button("Prev");
         Button nextBtn = new Button("Next");
@@ -46,7 +52,7 @@ public class Main extends Application {
         fileChooser.setTitle("Choose An Audio File");
 
         fileChooser.getExtensionFilters().addAll(
-              new FileChooser.ExtensionFilter("Audio FIles","*.mp3","*.wav")
+              new FileChooser.ExtensionFilter("Audio Files","*.mp3","*.wav")
         );
 
         loadBtn.setOnAction(event->{
@@ -54,7 +60,8 @@ public class Main extends Application {
 
             if(selectedFile!=null){
                 musicPlayer.loadExternalFIle(selectedFile);
-                title.setText(selectedFile.getName());
+//                title.setText(selectedFile.getName());
+
             }
         });
 
@@ -78,14 +85,18 @@ public class Main extends Application {
         volumeBar.setPrefWidth(100);
 
         HBox volumeLayout = new HBox(10);
-        volumeLayout.setAlignment(Pos.BASELINE_RIGHT);
+        volumeLayout.setAlignment(Pos.BOTTOM_CENTER);
         volumeLayout.getChildren().addAll(volumeBar,volumeLabel);
+
+        albumCover.setFitHeight(200);
+        albumCover.setFitWidth(200);
+        albumCover.setPreserveRatio(true);
 
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title,buttonLayout,timeLayout,volumeLayout);
+        root.getChildren().addAll(title,albumCover,titleLabel,buttonLayout,timeLayout,volumeLayout);
 
-        Scene scene = new Scene(root, 350, 150);
+        Scene scene = new Scene(root, 600, 500);
         stage.setTitle("MP3 Player");
         stage.setScene(scene);
 

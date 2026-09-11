@@ -1,7 +1,11 @@
 package org.zoho;
 
+import javafx.beans.Observable;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -16,6 +20,8 @@ public class MusicPlayer {
     private Label durationLabel;
     private Slider progressBar;
     private Slider volumeSlider;
+    private ImageView albumCover;
+    private Label titleLabel;
 
     private String formatTime(Duration duration){
         int totalSeconds = (int)Math.floor(duration.toSeconds());
@@ -25,17 +31,19 @@ public class MusicPlayer {
         return String.format("%02d:%02d",minutes,seconds);
     }
 
-    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar,Slider volumeSlider){
+    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar,Slider volumeSlider,ImageView albumCover,Label titleLabel){
         this.timeLabel=timeLabel;
         this.durationLabel=durationLabel;
         this.progressBar= progressBar;
         this.volumeSlider=volumeSlider;
+        this.albumCover=albumCover;
+        this.titleLabel=titleLabel;
 
         songs = new String[]{
-            "src/main/resources/Gintama_ED_25.mp3",
-            "src/main/resources/Gintama_ED_30.mp3",
-            "src/main/resources/Raga of Revenge.mp3",
-            "src/main/resources/The Climb.mp3"
+                "src/main/resources/CHiCO with HoneyWorks - Hikari Shoumeiron.mp3",
+                "src/main/resources/THREE LIGHTS DOWN KINGS - Glorious Days.mp3",
+                "src/main/resources/Anirudh Ravichander - Raga of Revenge (From  DC ).mp3",
+                "src/main/resources/Miley Cyrus - The Climb.mp3"
         };
 
         volumeSlider.valueProperty().addListener((observable,oldValue,newValue)->{
@@ -72,6 +80,28 @@ public class MusicPlayer {
             Duration totalDuration = media.getDuration();
             durationLabel.setText(formatTime(totalDuration));
             progressBar.setMax(totalDuration.toSeconds());
+
+            ObservableMap<String,Object> metadata = media.getMetadata();
+            if(metadata.containsKey("image")){
+                Image albumArt = (Image) metadata.get("image");
+                albumCover.setImage(albumArt);
+            }
+            else{
+                albumCover.setImage(null);
+            }
+
+            String songTitle =(String)metadata.get("title");
+            String artistName = (String) metadata.get("artist");
+
+            if(songTitle!=null && artistName!=null){
+                titleLabel.setText(songTitle+" - "+artistName);
+            }
+            else if (songTitle!=null ) {
+                titleLabel.setText(songTitle);
+            }
+            else{
+                titleLabel.setText(file.getName());
+            }
         });
 
         mediaPlayer.currentTimeProperty().addListener((observable, oldTime,newTime)->{
@@ -109,6 +139,28 @@ public class MusicPlayer {
             Duration totalDuration = media.getDuration();
             durationLabel.setText(formatTime(totalDuration));
             progressBar.setMax(totalDuration.toSeconds());
+
+            ObservableMap<String,Object> metadata = media.getMetadata();
+            if(metadata.containsKey("image")){
+                Image albumArt = (Image) metadata.get("image");
+                albumCover.setImage(albumArt);
+            }
+            else{
+                albumCover.setImage(null);
+            }
+
+            String songTitle =(String)metadata.get("title");
+            String artistName = (String) metadata.get("artist");
+
+            if(songTitle!=null && artistName!=null){
+                titleLabel.setText(songTitle+" - "+artistName);
+            }
+            else if (songTitle!=null ) {
+                titleLabel.setText(songTitle);
+            }
+            else{
+                titleLabel.setText(file.getName());
+            }
         });
 
         mediaPlayer.currentTimeProperty().addListener((observable, oldTime,newTime)->{
