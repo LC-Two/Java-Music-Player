@@ -20,9 +20,11 @@ public class Main extends Application {
     Label timeLabel = new Label("00:00");
     Label durationLabel = new Label("00:00");
     Label divider = new Label("/");
+    Label volumeLabel = new Label("Volume:");
     Slider progessbar = new Slider();
+    Slider volumeBar = new Slider();
 
-    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel,progessbar);
+    private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel,progessbar,volumeBar);
 
     public void start(Stage stage){
         Text title = new Text("Javafx Mp3 player");
@@ -63,15 +65,25 @@ public class Main extends Application {
 
 
         progessbar.setPrefWidth(200);
+        progessbar.setShowTickMarks(false);
+        progessbar.setShowTickLabels(false);
 
         HBox timeLayout = new HBox(10);
         timeLayout.setAlignment(Pos.BOTTOM_CENTER);
         timeLayout.getChildren().addAll(timeLabel,divider,durationLabel,progessbar);
 
+        volumeBar.setMax(1);
+        volumeBar.setMin(0);
+        volumeBar.setValue(0.5);
+        volumeBar.setPrefWidth(100);
+
+        HBox volumeLayout = new HBox(10);
+        volumeLayout.setAlignment(Pos.BASELINE_RIGHT);
+        volumeLayout.getChildren().addAll(volumeBar,volumeLabel);
 
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title,buttonLayout,timeLayout);
+        root.getChildren().addAll(title,buttonLayout,timeLayout,volumeLayout);
 
         Scene scene = new Scene(root, 350, 150);
         stage.setTitle("MP3 Player");

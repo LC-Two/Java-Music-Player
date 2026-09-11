@@ -15,6 +15,7 @@ public class MusicPlayer {
     private Label timeLabel;
     private Label durationLabel;
     private Slider progressBar;
+    private Slider volumeSlider;
 
     private String formatTime(Duration duration){
         int totalSeconds = (int)Math.floor(duration.toSeconds());
@@ -24,10 +25,11 @@ public class MusicPlayer {
         return String.format("%02d:%02d",minutes,seconds);
     }
 
-    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar){
+    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar,Slider volumeSlider){
         this.timeLabel=timeLabel;
         this.durationLabel=durationLabel;
         this.progressBar= progressBar;
+        this.volumeSlider=volumeSlider;
 
         songs = new String[]{
             "src/main/resources/Gintama_ED_25.mp3",
@@ -35,6 +37,13 @@ public class MusicPlayer {
             "src/main/resources/Raga of Revenge.mp3",
             "src/main/resources/The Climb.mp3"
         };
+
+        volumeSlider.valueProperty().addListener((observable,oldValue,newValue)->{
+            if(mediaPlayer!=null){
+                mediaPlayer.setVolume(newValue.doubleValue());
+            }
+        });
+
         loadMusic(currentSongIndex);
     }
 
@@ -54,6 +63,8 @@ public class MusicPlayer {
         String uriString = file.toURI().toString();
         Media media = new Media(uriString);
         mediaPlayer = new MediaPlayer(media);
+
+        mediaPlayer.setVolume(volumeSlider.getValue());
 
         mediaPlayer.setOnEndOfMedia(this::next);
 
@@ -76,6 +87,8 @@ public class MusicPlayer {
            }
        });
 
+
+
     }
 
     public void loadExternalFIle(File file){
@@ -87,6 +100,8 @@ public class MusicPlayer {
         String uriString = file.toURI().toString();
         Media media = new Media(uriString);
         mediaPlayer = new MediaPlayer(media);
+
+        mediaPlayer.setVolume(volumeSlider.getValue());
 
         mediaPlayer.setOnEndOfMedia(this::next);
 
