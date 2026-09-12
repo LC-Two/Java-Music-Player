@@ -1,9 +1,11 @@
 package org.zoho;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.List;
 
 public class Main extends Application {
     Label timeLabel = new Label("00:00");
@@ -27,6 +30,7 @@ public class Main extends Application {
     Slider progessbar = new Slider();
     Slider volumeBar = new Slider();
     ImageView albumCover = new ImageView();
+    ListView<String> playListView = new ListView<>();
 
     private MusicPlayer musicPlayer = new MusicPlayer(timeLabel,durationLabel,progessbar,volumeBar,albumCover,titleLabel);
 
@@ -46,6 +50,15 @@ public class Main extends Application {
         pauseBtn.setOnAction(event-> musicPlayer.pause());
         playBtn.setOnAction(event-> musicPlayer.play());
 
+        playListView.setPrefWidth(250);
+        playListView.setOnMouseClicked(event->{
+            if(event.getClickCount()==2){
+                int selectedIndex = playListView.getSelectionModel().getSelectedIndex();
+                musicPlayer.playSongAtIndex(selectedIndex);
+            }
+        });
+
+
         Button loadBtn = new Button("Load Song");
 
         FileChooser fileChooser = new FileChooser();
@@ -56,11 +69,13 @@ public class Main extends Application {
         );
 
         loadBtn.setOnAction(event->{
-            File selectedFile = fileChooser.showOpenDialog(stage);
+           List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage);
 
-            if(selectedFile!=null){
-                musicPlayer.loadExternalFIle(selectedFile);
-//                title.setText(selectedFile.getName());
+            if(selectedFiles!=null && !selectedFiles.isEmpty()){
+                for(File file:selectedFiles){
+                    playListView.getItems().add(file.getName());
+                }
+                musicPlayer.addFilesToPlaylist(selectedFiles);
 
             }
         });
@@ -68,7 +83,7 @@ public class Main extends Application {
 
         HBox buttonLayout = new HBox(10);
         buttonLayout.setAlignment(Pos.CENTER);
-        buttonLayout.getChildren().addAll(prevBtn,playBtn,nextBtn,pauseBtn,loadBtn);
+        buttonLayout.getChildren().addAll(prevBtn,playBtn,pauseBtn,nextBtn,loadBtn);
 
 
         progessbar.setPrefWidth(200);
@@ -92,11 +107,22 @@ public class Main extends Application {
         albumCover.setFitWidth(200);
         albumCover.setPreserveRatio(true);
 
-        VBox root = new VBox(20);
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(title,albumCover,titleLabel,buttonLayout,timeLayout,volumeLayout);
+        VBox playerControls = new VBox(20);
+        playerControls.setAlignment(Pos.CENTER);
+        playerControls.setPrefWidth(400);
+        playerControls.getChildren().addAll(title,albumCover,titleLabel,buttonLayout,timeLayout,volumeLayout);
 
-        Scene scene = new Scene(root, 600, 500);
+        VBox playListContainer = new VBox(5);
+        playListContainer.setAlignment(Pos.CENTER);
+        Label queueLabel = new Label("Up Next");
+        playListContainer.getChildren().addAll(queueLabel,playListView);
+
+        HBox root = new HBox(20);
+        root.setAlignment(Pos.CENTER);
+        root.getChildren().addAll(playerControls,playListContainer);
+
+
+        Scene scene = new Scene(root, 700, 500);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         stage.setTitle("MP3 Player");
