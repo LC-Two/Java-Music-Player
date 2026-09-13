@@ -34,3 +34,65 @@
 .slider:hover .thumb{
     -fx-background-color: #1DB954;
 }
+
+.list-view{
+    -fx-background-color: #191414;
+    -fx-control-inner-background: #191414;
+    -fx-border-color: #282828;
+    -fx-padding:2px;
+}
+
+.list-cell{
+    -fx-background-color: #191414;
+    -fx-text-fill: #b3b3b3;
+    -fx-font-size: 13px;
+    -fx-padding: 8px 12px;
+}
+
+.list-cell:hover{
+    -fx-background-color: #282828;
+    -fx-text-fill: #FFFFFF;
+    -fx-cursor: hand;
+}
+
+.list-cell:selected{
+    -fx-background-color: #333333;
+    -fx-text-fill: #1DB954;
+    -fx-font-weight: bold;
+}
+
+.list-view .scroll-bar:vertical{
+    -fx-background-color: #191414;
+}
+
+.list-view .scroll-bar:vertical.track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-view .scroll-bar:vertical .thumb{
+    -fx-background-color: #535353;
+    -fx-background-radius: 10px;
+}
+
+.list-view .scroll-bar:vertical .thumb:hover{
+    -fx-background-color:#b3b3b3;
+}
+.list-view .scroll-bar:horizontal{
+    -fx-background-color: #191414;
+}
+
+.list-view .scroll-bar:horizontal.track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-view .scroll-bar:horizontal .thumb{
+    -fx-background-color: #535353;
+    -fx-background-radius: 10px;
+}
+
+.list-view .scroll-bar:horizontal .thumb:hover{
+    -fx-background-color:#b3b3b3;
+}
+

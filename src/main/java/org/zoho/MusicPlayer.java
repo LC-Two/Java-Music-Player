@@ -2,7 +2,9 @@ package org.zoho;
 
 import javafx.beans.Observable;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,6 +28,8 @@ public class MusicPlayer {
     private Slider volumeSlider;
     private ImageView albumCover;
     private Label titleLabel;
+    private ListView playListView;
+
 
     private List<File> playList = new ArrayList<>();
     private int currentIndex=0;
@@ -38,13 +42,14 @@ public class MusicPlayer {
         return String.format("%02d:%02d",minutes,seconds);
     }
 
-    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar,Slider volumeSlider,ImageView albumCover,Label titleLabel){
+    public MusicPlayer(Label timeLabel, Label durationLabel, Slider progressBar, Slider volumeSlider, ImageView albumCover, Label titleLabel, ListView playListView){
         this.timeLabel=timeLabel;
         this.durationLabel=durationLabel;
         this.progressBar= progressBar;
         this.volumeSlider=volumeSlider;
         this.albumCover=albumCover;
         this.titleLabel=titleLabel;
+        this.playListView = playListView;
 
 //        songs = new String[]{
 //                "src/main/resources/CHiCO with HoneyWorks - Hikari Shoumeiron.mp3",
@@ -212,6 +217,9 @@ public class MusicPlayer {
             mediaPlayer.dispose();
         }
 
+        playListView.getSelectionModel().select(currentIndex);
+        playListView.scrollTo(currentIndex);
+
         File currentFile = playList.get(currentIndex);
         Media media = new Media(currentFile.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
@@ -259,6 +267,7 @@ public class MusicPlayer {
 
         play();
 
+
     }
 
 
@@ -269,10 +278,24 @@ public class MusicPlayer {
         }
     }
 
+    public boolean togglePlayPause(){
+        if(mediaPlayer==null) return false;
+
+        if(mediaPlayer.getStatus()==MediaPlayer.Status.PLAYING){
+            mediaPlayer.pause();
+            return false;
+        }
+
+        mediaPlayer.play();
+        return true;
+    }
+
 
 
     public void play(){
-        if(mediaPlayer != null) mediaPlayer.play();
+        if(mediaPlayer != null) {
+            mediaPlayer.play();
+        }
     }
 
     public void pause(){
